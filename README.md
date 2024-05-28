@@ -41,7 +41,6 @@ This project focuses on the backend development using Node.js, Express.js, and M
 | Field        | Description                              |
 |--------------|------------------------------------------|
 | storeID      | Identifier for the store                 |
-| productID    | Identifier for the product               |
 | quantitySold | Quantity of juice sold                   |
 | kioskOwnerID | Identifier for the kiosk owner           |
 
@@ -50,7 +49,6 @@ This project focuses on the backend development using Node.js, Express.js, and M
 | Field          | Description                              |
 |----------------|------------------------------------------|
 | storeID        | Identifier for the store                 |
-| productID      | Identifier for the product               |
 | quantityReturned | Quantity of juice returned             |
 | reasonForReturn | Reason for returning the juice          |
 | kioskOwnerID   | Identifier for the kiosk owner           |
