@@ -1,60 +1,70 @@
-// Import the stores module which contains the database logic
-const stores = require("../modules/stores");
-// Method to get all stores
+// import store from the modules folder
+const Store = require("../model/stores");
+
+// method to get all stores
 exports.getStores = async (req, res) => {
   try {
-    // Call the getStores method from the stores module
-    let storeData = await stores.getStores();
-    // Send the retrieved store data as the response
-    res.send(storeData);
+    // Query to find all stores
+    const stores = await Store.find();
+    // send a response of stores
+    res.send(stores);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 };
-// Method to add a new store
+// function to add a new store
 exports.addStore = async (req, res) => {
   try {
-    // Read the new store data from the request body
-    const newStore = req.body;
-    // Call the addStore method from the stores module and store it into result
-    const result = await stores.addStore(newStore);
-    // Send the result as the response with a 201 status code
+    // Create a new Store with data from the request body
+    const newStore = new Store(req.body);
+    // save the daya in a result
+    const result = await newStore.save();
+    // send result with response
     res.status(201).send(result);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 };
-// Method to delete a store by ID
+// function to delete a store
 exports.deleteStore = async (req, res) => {
   try {
     // get the store ID from the request parameters
     const storeId = req.params.id;
-    // Call the deleteStore method from the stores module
-    const result = await stores.deleteStore(storeId);
-    // send the response
-    res.send(result);
+    // Find and delete the store with the specified ID from the database
+    const result = await Store.findByIdAndDelete(storeId);
+    // If the store was not found, send a 404 (not found) response
+    if (!result) {
+      return res.status(404).send({ message: "Store not found" });
+    }
+    // Send a success message as a response
+    res.send({ message: "Store deleted successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 };
-// Method to update a store by ID
+// function to update a store
 exports.updateStore = async (req, res) => {
   try {
-    // Read the store ID from the request parameters
+    // get the store ID and data from the request parameters
     const storeId = req.params.id;
-     // Read the updated store data from the request body
     const updatedData = req.body;
-     // Call the updateStore method from the stores module and store it in a variable
-    const result = await stores.updateStore(storeId, updatedData);
-     // If no store was matched for the update, send a 404 Not Found response
-    if (result.matchedCount === 0) {
+    // Find and update the store with the specified ID in the database
+
+    const result = await Store.findByIdAndUpdate(
+      storeId,
+      updatedData,
+      // Return the updated document and run validators
+      { new: true, runValidators: true }
+    );
+    // If the store was not found, send a 404 (not found) response
+    if (!result) {
       return res.status(404).send({ message: "Store not found" });
     }
-     // Send a success message as the response with a 200 status code
-    res.status(200).send({ message: "Store updated successfully" });
+    // Send a success message as a response
+    res.send({ message: "Store updated successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
