@@ -1,4 +1,4 @@
-# Coconut Juice Inventory Management System CocoTracker- Backend
+# Coconut Juice Inventory (CocoTracker) - Backend
 
 ## Project Overview
 
