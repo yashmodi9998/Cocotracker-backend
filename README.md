@@ -1,4 +1,4 @@
-# Coconut Juice Inventory Management System CocoTracker- Backend
+# Coconut Juice Inventory (CocoTracker) - Backend
 
 ## Project Overview
 
@@ -90,12 +90,43 @@ To run this project, make sure you have Node.js and MongoDB installed. Follow th
 
 5. The server will be running at `http://localhost:<PORT>`, and you can use tools like Postman to interact with the API endpoints.
 
-## Endpoints
+## API Endpoints
 
 The API provides the following endpoints to interact with the collections:
 
-- `GET /stores`: Retrieve all stores
-- `POST /stores`: Add a new store
-- `DELETE /stores/:id`: Delete a store by ID
-- `PUT /stores/:id`: Update a store by ID
+### User Routes
+
+| HTTP Method | Endpoint | Description           |
+|-------------|----------|-----------------------|
+| GET         | /        | Get all users         |
+| POST        | /        | Add a new user        |
+| DELETE      | /:id     | Delete a user by ID   |
+| PUT         | /:id     | Update a user by ID   |
+
+### Store Routes
+
+| HTTP Method | Endpoint      | Description             |
+|-------------|---------------|-------------------------|
+| GET         | /stores       | Get all stores          |
+| POST        | /stores       | Add a new store         |
+| DELETE      | /stores/:id   | Delete a store by ID    |
+| PUT         | /stores/:id   | Update a store by ID    |
+
+### Stock Routes
+
+| HTTP Method | Endpoint      | Description            |
+|-------------|---------------|------------------------|
+| GET         | /stock        | Get all stock          |
+| POST        | /stock        | Add a new stock        |
+| DELETE      | /stock/:id    | Delete a stock by ID   |
+| PUT         | /stock/:id    | Update a stock by ID   |
+
+### Sales Routes
+
+| HTTP Method | Endpoint      | Description            |
+|-------------|---------------|------------------------|
+| GET         | /sales        | Get all sales          |
+| POST        | /sales        | Add a new sale         |
+| DELETE      | /sales/:id    | Delete a sale by ID    |
+| PUT         | /sales/:id    | Update a sale by ID    |
 
