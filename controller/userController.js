@@ -1,4 +1,4 @@
-// import user from the modules folder
+// import user from the models folder
 const User = require("../model/users");
 
 // method to get all users

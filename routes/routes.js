@@ -31,5 +31,17 @@ router.post("/sales", salesController.addSale);
 router.delete("/sales/:id", salesController.deleteSale);
 router.put("/sales/:id", salesController.updateSale);
 
+//returnStock controller file that handles logic for request
+const returnStockController = require("../controller/returnStockContoller");
+
+router.post("/allocate", returnStockController.allocateStock); // Route for stock allocation
+router.post("/return-request", returnStockController.requestReturn); // Route for return request
+router.put("/approve-return/:id", returnStockController.approveReturn); // Route for approving return request
+router.get(
+  "/return-requests/approved",
+  returnStockController.getApprovedReturns
+); //Route to get approved requests
+router.get("/return-requests/pending", returnStockController.getPendingReturns); //Route to get pending requests
+router.get("/allocated-stock", returnStockController.getAllocatedStock); //Route to get allocated stocks
 // export parameter as a router
 module.exports = router;

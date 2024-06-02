@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-// Define the schema for the Sales collection
+// schema for the Sales collection
 const salesSchema = new mongoose.Schema({
   quantitySold: { type: Number, required: true }, // Quantity of juice sold (required)
   date: { type: Date, required: true }, // Date of the sale (required)

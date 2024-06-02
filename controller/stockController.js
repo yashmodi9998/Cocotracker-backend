@@ -1,4 +1,4 @@
-// import stock from the modules folder
+// import stock 
 const Stock = require("../model/stocks");
 
 // method to get all stocks
@@ -16,7 +16,7 @@ exports.getStock = async (req, res) => {
 // function to add a new stock
 exports.addStock = async (req, res) => {
   try {
-    // Create a new stock with data from the request body
+    // new stock with data from the request body
     const newStock = new Stock(req.body);
     // save the daya in a result
     const result = await newStock.save();

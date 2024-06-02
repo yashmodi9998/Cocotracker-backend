@@ -1,4 +1,4 @@
-// import store from the modules folder
+// import store from the models folder
 const Store = require("../model/stores");
 
 // method to get all stores
