@@ -1,6 +1,8 @@
 // import user from the models folder
 const User = require("../model/users");
-
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 // method to get all users
 exports.getUser = async (req, res) => {
   try {
@@ -14,13 +16,18 @@ exports.getUser = async (req, res) => {
   }
 };
 // function to add a new user
-exports.addUser = async (req, res) => {
+exports.registedUser = async (req, res) => {
   try {
-    // Create a new user with data from the request body
-    const newUser = new User(req.body);
-    // save the daya in a result
+    // use bcrypt package to encrypt password
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    // Create a new user with data from the request body and new hashedPassword
+    const newUser = new User({
+      ...req.body,
+      password: hashedPassword, // Set the hashed password
+    });
+    // save the data in a result
     const result = await newUser.save();
-    // send result with response
+    //send result with response
     res.status(201).send(result);
   } catch (error) {
     console.error(error);
@@ -68,5 +75,32 @@ exports.updateUser = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
+  }
+};
+// method to login user
+exports.loginUser = async (req, res) => {
+  try {
+    // store email and password
+    const { email, password } = req.body;
+    // find for user using email
+    const user = await User.findOne({ email });
+    // if not found, show as authentication failed
+    if (!user) {
+      return res.status(401).json({ error: "Authentication failed" });
+    }
+    // check for the password usinf bcrypt to compare
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    // if password is not match return authentication failed
+    if (!passwordMatch) {
+      return res.status(401).json({ error: "Authentication failed" });
+    }
+    // creates a token with signature using email and a secret key which expires in 1 hour
+    const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    // send token as a response
+    res.status(200).json({ token });
+  } catch (error) {
+    res.status(500).json({ error: "Login failed" });
   }
 };

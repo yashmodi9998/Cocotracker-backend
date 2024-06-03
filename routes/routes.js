@@ -1,12 +1,14 @@
 //Import required modules
 const express = require("express");
+const verify = require("./verifyRoutes");
 // router object
 const router = express.Router();
 
 //user controller file that handles logic for request
 const userController = require("../controller/userController");
-router.get("/", userController.getUser);
-router.post("/", userController.addUser);
+router.get("/", verify, userController.getUser);
+router.post("/register", userController.registedUser);
+router.post("/login", userController.loginUser);
 router.delete("/:id", userController.deleteUser);
 router.put("/:id", userController.updateUser);
 
