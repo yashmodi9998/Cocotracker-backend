@@ -8,26 +8,27 @@ This project focuses on the backend development using Node.js, Express.js, and M
 
 ## Collections
 
-### Users Collection
+### Users Collection(DONE)
 
 | Field    | Description                     |
 |----------|---------------------------------|
 | userID   | Unique identifier for the user  |
 | name     | Name of the user                |
 | email    | Email address of the user       |
+| phoneNumber    | Phone num of the user       |
 | password | Password for user authentication|
 | role     | Role of the user (admin/kiosk owner) |
 
-### Kiosk Stores Collection
+### Kiosk Stores Collection(DONE)
 
 | Field       | Description                             |
 |-------------|-----------------------------------------|
 | storeID     | Unique identifier for the store         |
 | storeName   | Name of the store                       |
 | address     | Address of the store                    |
-| contactInfo | Contact information for the store       |
+| contactInformation | Contact information for the store       |
 
-### Stock Collection
+### Stock Collection(DONE)
 
 | Field       | Description                             |
 |-------------|-----------------------------------------|
@@ -36,25 +37,31 @@ This project focuses on the backend development using Node.js, Express.js, and M
 | quantity    | Quantity of juice in stock              |
 | supplierName| Name of the supplier                    |
 
-### Sales Collection
+### Sales Collection(DONE)
 
 | Field        | Description                              |
 |--------------|------------------------------------------|
 | storeID      | Identifier for the store                 |
 | quantitySold | Quantity of juice sold                   |
 | kioskOwnerID | Identifier for the kiosk owner           |
+| date    | date of sales       |
+| storeName    | Name of the store       |
+| kioskOwner    | Name of the kiosk owner      |
 
-### Return Stock Collection
+### Return Stock Collection(DONE)
 
 | Field          | Description                              |
 |----------------|------------------------------------------|
 | storeID        | Identifier for the store                 |
-| quantityReturned | Quantity of juice returned             |
-| reasonForReturn | Reason for returning the juice          |
-| kioskOwnerID   | Identifier for the kiosk owner           |
+| kioskOwnerId        | Identifier for the kiosk owner                 |
+| remainingStock | Quantity of juice returned             |
+| reason | Reason for returning the juice          |
+| status   |status of the request         |
+| dateRequested        | Date of the returnRequest                 |
+| dateApproved        | Date of return request approved                 |
 
 
-### Fridge Stock Collection
+### Fridge Stock Collection(TODO)
 
 | Field    | Description                     |
 |----------|---------------------------------|
@@ -129,4 +136,15 @@ The API provides the following endpoints to interact with the collections:
 | POST        | /sales        | Add a new sale         |
 | DELETE      | /sales/:id    | Delete a sale by ID    |
 | PUT         | /sales/:id    | Update a sale by ID    |
+
+### ReturnStock Controller
+
+| HTTP Method | Endpoint                     | Description                            |
+|-------------|------------------------------|----------------------------------------|
+| POST        | `/allocate`                  | Route for stock allocation             |
+| POST        | `/return-request`            | Route for submitting a return request  |
+| PUT         | `/approve-return/:id`        | Route for approving a return request   |
+| GET         | `/return-requests/approved`  | Route to get all approved requests     |
+| GET         | `/return-requests/pending`   | Route to get all pending requests      |
+| GET         | `/allocated-stock`           | Route to get all allocated stocks      |
 
