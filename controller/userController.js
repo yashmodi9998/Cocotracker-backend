@@ -15,7 +15,7 @@ exports.getUser = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-// function to add a new user
+// function to register a new user
 exports.registedUser = async (req, res) => {
   try {
     // use bcrypt package to encrypt password
