@@ -35,7 +35,6 @@ router.put("/sales/:id", verify, salesController.updateSale);
 
 //returnStock controller file that handles logic for request
 const returnStockController = require("../controller/returnStockContoller");
-
 router.post("/allocate", verify, returnStockController.allocateStock); // Route for stock allocation
 router.post("/return-request", verify, returnStockController.requestReturn); // Route for return request
 router.put("/approve-return/:id", verify, returnStockController.approveReturn); // Route for approving return request

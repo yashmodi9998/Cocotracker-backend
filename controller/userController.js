@@ -27,8 +27,18 @@ exports.registedUser = async (req, res) => {
     });
     // save the data in a result
     const result = await newUser.save();
+    // creates a token with signature using email and a secret key which expires in 1 hour
+    const token = jwt.sign({ email: newUser.email }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
     //send result with response
-    res.status(201).send(result);
+    res
+      .status(201)
+      .json({
+        token,
+        user: { name: result.name, email: result.email, role: result.role },
+      });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
