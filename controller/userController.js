@@ -33,11 +33,14 @@ exports.registedUser = async (req, res) => {
     });
 
     //send result with response
+ 
     res
       .status(201)
       .json({
         token,
-        user: { name: result.name, email: result.email, role: result.role },
+        email: result.email,
+        role: result.role,
+        name: result.name,
       });
   } catch (error) {
     console.error(error);
@@ -109,7 +112,9 @@ exports.loginUser = async (req, res) => {
       expiresIn: "1h",
     });
     // send token as a response
-    res.status(200).json({ token });
+    res
+      .status(201)
+      .json({ token, email: user.email, role: user.role, name: user.name });
   } catch (error) {
     res.status(500).json({ error: "Login failed" });
   }
