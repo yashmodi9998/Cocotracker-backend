@@ -9,8 +9,8 @@ const userController = require("../controller/userController");
 router.get("/", verify, userController.getUser);
 router.post("/register", userController.registedUser);
 router.post("/login", userController.loginUser);
-router.delete("/:id", verify, userController.deleteUser);
 router.put("/:id", verify, userController.updateUser);
+router.delete("/:id", verify, userController.deleteUser);
 
 //store controller file that handles logic for request
 const storeController = require("../controller/storeController");
