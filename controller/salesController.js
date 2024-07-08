@@ -17,9 +17,9 @@ exports.getSales = async (req, res) => {
 exports.addSale = async (req, res) => {
   try {
     // to get relevent fields from body params
-    const { quantitySold, date, storeId, kioskOwnerId } = req.body;
+    const { quantitySold, date, storeName, kioskOwner } = req.body;
     // to set values of data
-    const newSale = new Sales({ quantitySold, date, storeId, kioskOwnerId });
+    const newSale = new Sales({ quantitySold, date, storeName, kioskOwner });
     // to save value to db
     const result = await newSale.save();
     // set a res as 201 and send the resuls as a response
