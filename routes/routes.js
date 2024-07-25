@@ -1,53 +1,95 @@
-//Import required modules
+// Import required modules
 const express = require("express");
 const verify = require("./verifyRoutes");
-// router object
 const router = express.Router();
 
-//user controller file that handles logic for request
+// Import controller files
 const userController = require("../controller/userController");
+const storeController = require("../controller/storeController");
+const stockController = require("../controller/stockController");
+const salesController = require("../controller/salesController");
+const stockAllocationController = require("../controller/stockAllocationController");
+const returnStockController = require("../controller/returnStockController");
+
+// User routes
 router.get("/", verify, userController.getUser);
 router.post("/register", userController.registedUser);
 router.post("/login", userController.loginUser);
 router.put("/:id", verify, userController.updateUser);
 router.delete("/:id", verify, userController.deleteUser);
 
-//store controller file that handles logic for request
-const storeController = require("../controller/storeController");
+// Store routes
 router.get("/stores", verify, storeController.getStores);
 router.post("/stores", verify, storeController.addStore);
 router.delete("/stores/:id", verify, storeController.deleteStore);
 router.put("/stores/:id", verify, storeController.updateStore);
 
-//stock controller file that handles logic for request
-const stockController = require("../controller/stockController");
+// Stock routes
 router.get("/stock", verify, stockController.getStock);
 router.post("/stock", verify, stockController.addStock);
 router.delete("/stock/:id", verify, stockController.deleteStock);
 router.put("/stock/:id", verify, stockController.updateStock);
 
-//sales controller file that handles logic for request
-const salesController = require("../controller/salesController");
+// Sales routes
 router.get("/sales", verify, salesController.getSales);
 router.post("/sales", verify, salesController.addSale);
 router.delete("/sales/:id", verify, salesController.deleteSale);
 router.put("/sales/:id", verify, salesController.updateSale);
 
-//returnStock controller file that handles logic for request
-const returnStockController = require("../controller/returnStockContoller");
-router.post("/allocate", verify, returnStockController.allocateStock); // Route for stock allocation
-router.post("/return-request", verify, returnStockController.requestReturn); // Route for return request
-router.put("/approve-return/:id", verify, returnStockController.approveReturn); // Route for approving return request
+// Stock Allocation routes
+
+//for admin
 router.get(
-  "/return-requests/approved",
+  "/allocate-stock",
   verify,
-  returnStockController.getApprovedReturns
-); //Route to get approved requests
+  stockAllocationController.getAllAllocations
+);
+// for kiosk owner specific
 router.get(
-  "/return-requests/pending",
+  "/allocate-stock/:kioskOwnerId",
   verify,
-  returnStockController.getPendingReturns
-); //Route to get pending requests
-router.get("/allocated-stock", verify, returnStockController.getAllocatedStock); //Route to get allocated stocks
-// export parameter as a router
+  stockAllocationController.getAllocatedStockByKioskOwner
+);
+router.post("/allocate-stock", verify, stockAllocationController.allocateStock);
+router.delete(
+  "/allocate-stock/:id",
+  verify,
+  stockAllocationController.deleteAllocation
+);
+router.put(
+  "/allocate-stock/:id",
+  verify,
+  stockAllocationController.updateAllocation
+);
+
+router.post("/return-request", verify, returnStockController.requestReturn);
+// Get all return requests
+router.get(
+  "/return-requests",
+  verify,
+  returnStockController.getAllReturnRequests
+);
+
+// Get return requests for a specific kiosk owner
+router.get(
+  "/return-requests/:kioskOwnerId",
+  verify,
+  returnStockController.getReturnRequestsByKioskOwner
+);
+
+// Approve a return request
+router.put(
+  "/approve-return-request/:id",
+  verify,
+  returnStockController.approveReturnRequest
+);
+
+// Reject a return request
+router.delete(
+  "/return-request/:id",
+  verify,
+  returnStockController.rejectReturnRequest
+);
+
+// Export router
 module.exports = router;

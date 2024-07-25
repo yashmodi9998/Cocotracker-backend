@@ -11,6 +11,7 @@ exports.getUser = async (req, res) => {
     // send a response of users
     res.send(users);
   } catch (error) {
+    
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
@@ -33,15 +34,13 @@ exports.registedUser = async (req, res) => {
     });
 
     //send result with response
- 
-    res
-      .status(201)
-      .json({
-        token,
-        email: result.email,
-        role: result.role,
-        name: result.name,
-      });
+    res.status(201).json({
+      token,
+      id: result._id,
+      email: result.email,
+      role: result.role,
+      name: result.name,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -112,9 +111,13 @@ exports.loginUser = async (req, res) => {
       expiresIn: "1h",
     });
     // send token as a response
-    res
-      .status(201)
-      .json({ token, email: user.email, role: user.role, name: user.name });
+    res.status(201).json({
+      token,
+      id: user._id,
+      email: user.email,
+      role: user.role,
+      name: user.name,
+    });
   } catch (error) {
     res.status(500).json({ error: "Login failed" });
   }
