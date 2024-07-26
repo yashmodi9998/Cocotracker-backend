@@ -3,26 +3,21 @@ const StockAllocation = require("../model/stockAllocation");
 
 // Create a return request
 exports.requestReturn = async (req, res) => {
+  const { stockAllocationId, returningStock, reason } = req.body;
+
   try {
-    const { stockAllocationId, remainingStock, reason } = req.body;
-    const returnRequest = new ReturnRequest({
+    const newRequest = new ReturnRequest({
       stockAllocationId,
-      remainingStock,
+      returningStock,
       reason,
+      status: "pending", 
     });
-    const savedRequest = await returnRequest.save();
 
-    // Update stock allocation with the return request ID
-    await StockAllocation.findByIdAndUpdate(
-      stockAllocationId,
-      { returnRequestId: savedRequest._id },
-      { new: true }
-    );
-
-    res.status(201).json(savedRequest);
+    await newRequest.save();
+    res.status(201).json(newRequest);
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
+    console.error("Error placing return request:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -39,21 +34,18 @@ exports.getAllReturnRequests = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
 // Fetch return requests for a specific kiosk owner
 exports.getReturnRequestsByKioskOwner = async (req, res) => {
   try {
-    const kioskOwnerId = req.params.kioskOwnerId;
-    const stockAllocations = await StockAllocation.find({ kioskOwnerId }).select('_id');
-    const returnRequests = await ReturnRequest.find({
-      stockAllocationId: { $in: stockAllocations }
-    }).populate({
-      path: 'stockAllocationId',
-      populate: { path: 'kioskOwnerId' }
-    });
-    res.json(returnRequests);
+    const { userId } = req.params;
+    const requests = await ReturnRequest.find({ userId }).populate(
+      "stockAllocationId"
+    );
+    res.status(200).json(requests);
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
+    console.error("Error fetching return requests:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 

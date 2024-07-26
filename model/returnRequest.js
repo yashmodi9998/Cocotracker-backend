@@ -6,7 +6,7 @@ const returnRequestSchema = new mongoose.Schema({
     ref: "StockAllocation",
     required: true,
   },
-  remainingStock: { type: Number, required: true },
+  returningStock: { type: Number, required: true },
   reason: { type: String },
   status: {
     type: String,
