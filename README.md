@@ -60,13 +60,7 @@ This project focuses on the backend development using Node.js, Express.js, and M
 | dateRequested  | Date of the returnRequest       |
 | dateApproved   | Date of return request approved |
 
-### Fridge Stock Collection(TODO)
 
-| Field    | Description                           |
-| -------- | ------------------------------------- |
-| date     | Date of the stock entry               |
-| ID       | Unique identifier for the stock entry |
-| quantity | Quantity of juice in stock            |
 
 ## Usage
 
@@ -104,49 +98,79 @@ To run this project, make sure you have Node.js and MongoDB installed. Follow th
 
 The API provides the following endpoints to interact with the collections:
 
+Certainly! Here is the API documentation in a table format:
+
+---
+
+# API Documentation
+
+## Base URL
+```
+http://yourdomain.com/api
+```
+
+## Authentication
+All routes except `POST /login` require authentication. Use the JWT token in the `Authorization` header of your requests.
+
+## Endpoints
+
 ### User Routes
 
-| HTTP Method | Endpoint | Description         |
-| ----------- | -------- | ------------------- |
-| GET         | `/`      | Get all users       |
-| POST        | `/`      | Add a new user      |
-| DELETE      | `/:id`   | Delete a user by ID |
-| PUT         | `/:id`   | Update a user by ID |
+| **Endpoint**        | **Method** | **Description**                  |
+|---------------------|------------|----------------------------------|
+| `/`                 | `GET`      | Get details of the logged-in user. |
+| `/register`         | `POST`     | Register a new user.              |
+| `/login`            | `POST`     | Log in and get a JWT token.       |
+| `/:id`              | `PUT`      | Update user details.             |
+| `/:id`              | `DELETE`   | Delete a user by ID.             |
 
 ### Store Routes
 
-| HTTP Method | Endpoint      | Description          |
-| ----------- | ------------- | -------------------- |
-| GET         | `/stores`     | Get all stores       |
-| POST        | `/stores`     | Add a new store      |
-| DELETE      | `/stores/:id` | Delete a store by ID |
-| PUT         | `/stores/:id` | Update a store by ID |
+| **Endpoint**        | **Method** | **Description**                  |
+|---------------------|------------|----------------------------------|
+| `/stores`           | `GET`      | Get a list of all stores.        |
+| `/stores`           | `POST`     | Add a new store.                 |
+| `/stores/:id`       | `DELETE`   | Delete a store by ID.            |
+| `/stores/:id`       | `PUT`      | Update store details.            |
 
 ### Stock Routes
 
-| HTTP Method | Endpoint     | Description          |
-| ----------- | ------------ | -------------------- |
-| GET         | `/stock `    | Get all stock        |
-| POST        | `/stock `    | Add a new stock      |
-| DELETE      | `/stock/:id` | Delete a stock by ID |
-| PUT         | `/stock/:id` | Update a stock by ID |
+| **Endpoint**        | **Method** | **Description**                  |
+|---------------------|------------|----------------------------------|
+| `/stock`            | `GET`      | Get a list of all stocks.        |
+| `/stock`            | `POST`     | Add new stock.                   |
+| `/stock/:id`        | `DELETE`   | Delete a stock by ID.            |
+| `/stock/:id`        | `PUT`      | Update stock details.            |
 
 ### Sales Routes
 
-| HTTP Method | Endpoint      | Description         |
-| ----------- | ------------- | ------------------- |
-| GET         | `/sales `     | Get all sales       |
-| POST        | `/sales `     | Add a new sale      |
-| DELETE      | `/sales/:id ` | Delete a sale by ID |
-| PUT         | `/sales/:id ` | Update a sale by ID |
+| **Endpoint**        | **Method** | **Description**                  |
+|---------------------|------------|----------------------------------|
+| `/sales`            | `GET`      | Get a list of all sales.         |
+| `/sales`            | `POST`     | Add a new sale.                  |
+| `/sales/:id`        | `DELETE`   | Delete a sale by ID.             |
+| `/sales/:id`        | `PUT`      | Update sale details.             |
 
-### ReturnStock Controller
+### Stock Allocation Routes
 
-| HTTP Method | Endpoint                    | Description                           |
-| ----------- | --------------------------- | ------------------------------------- |
-| POST        | `/allocate`                 | Route for stock allocation            |
-| POST        | `/return-request`           | Route for submitting a return request |
-| PUT         | `/approve-return/:id`       | Route for approving a return request  |
-| GET         | `/return-requests/approved` | Route to get all approved requests    |
-| GET         | `/return-requests/pending`  | Route to get all pending requests     |
-| GET         | `/allocated-stock`          | Route to get all allocated stocks     |
+| **Endpoint**                         | **Method** | **Description**                           |
+|--------------------------------------|------------|-------------------------------------------|
+| `/allocate-stock`                    | `GET`      | Get a list of all stock allocations (Admin only). |
+| `/allocate-stock/:kioskOwnerId`      | `GET`      | Get stock allocations for a specific kiosk owner. |
+| `/allocate-stock`                    | `POST`     | Allocate stock to a kiosk owner.          |
+| `/allocate-stock/:id`                | `DELETE`   | Delete a stock allocation by ID.          |
+| `/allocate-stock/:id`                | `PUT`      | Update a stock allocation by ID.          |
+
+### Return Request Routes
+
+| **Endpoint**                         | **Method** | **Description**                           |
+|--------------------------------------|------------|-------------------------------------------|
+| `/return-request`                    | `POST`     | Request a return for allocated stock.     |
+| `/return-requests`                   | `GET`      | Get a list of all return requests.        |
+| `/return-requests/:kioskOwnerId`     | `GET`      | Get return requests for a specific kiosk owner. |
+| `/approve-return-request/:id`        | `PUT`      | Approve a return request.                 |
+| `/return-request/:id`                | `DELETE`   | Reject a return request.                 |
+
+---
+
+Feel free to adjust or expand this documentation as needed for your specific project.
