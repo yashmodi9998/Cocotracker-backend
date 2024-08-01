@@ -84,6 +84,9 @@ To run this project, make sure you have Node.js and MongoDB installed. Follow th
    ```sh
    DB_URL=your_mongodb_url
    PORT=your_port_number
+   JWT_SECRET=your_secret_key
+   EMAIL=your_email
+   PASS= your_16_character_app_password
    ```
 
 4. Start the server:
@@ -163,6 +166,3 @@ All routes except `POST /login` `POST /register` require authentication. Use the
 | `/approve-return-request/:id`        | `PUT`      | Approve a return request.                 |
 | `/return-request/:id`                | `DELETE`   | Reject a return request.                 |
 
----
-
-Feel free to adjust or expand this documentation as needed for your specific project.
