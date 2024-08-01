@@ -96,21 +96,13 @@ To run this project, make sure you have Node.js and MongoDB installed. Follow th
 
 ## API Endpoints
 
-The API provides the following endpoints to interact with the collections:
-
-Certainly! Here is the API documentation in a table format:
 
 ---
 
 # API Documentation
 
-## Base URL
-```
-http://yourdomain.com/api
-```
-
 ## Authentication
-All routes except `POST /login` require authentication. Use the JWT token in the `Authorization` header of your requests.
+All routes except `POST /login` `POST /register` require authentication. Use the JWT token in the `Authorization` header of your requests.
 
 ## Endpoints
 
