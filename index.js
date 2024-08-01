@@ -6,7 +6,7 @@ const routes = require("./routes/routes");
 const mongoose = require("mongoose");
 //config dotenv package to read varibles from it
 require("dotenv").config();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8888;
 
 //Middleware
 app.use(cors()); //CORS
