@@ -12,7 +12,7 @@ const stockAllocationController = require("../controller/stockAllocationControll
 const returnStockController = require("../controller/returnStockController");
 
 // User routes
-router.get("/", verify, userController.getUser);
+router.get("/", userController.getUser);
 router.post("/register", userController.registedUser);
 router.post("/login", userController.loginUser);
 router.put("/:id", verify, userController.updateUser);
