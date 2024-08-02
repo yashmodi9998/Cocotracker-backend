@@ -1,4 +1,5 @@
 const Sales = require("../model/sales");
+const StockAllocation = require('../model/stockAllocation'); // Import the StockAllocation model
 
 // Method to get all sales
 exports.getSales = async (req, res) => {
@@ -16,17 +17,36 @@ exports.getSales = async (req, res) => {
 // Method to add a new sale
 exports.addSale = async (req, res) => {
   try {
-    // to get relevent fields from body params
-    const { quantitySold, date, storeName, kioskOwner } = req.body;
+    // to get relevant fields from body params
+    const {
+      quantitySold,
+      date,
+      storeName,
+      kioskOwner,
+      stockAllocationId,
+    } = req.body;
+
+    // Check if the stock allocation exists
+    const stockAllocation = await StockAllocation.findById(stockAllocationId);
+    if (!stockAllocation) {
+      return res.status(400).send({ message: "Invalid stock allocation" });
+    }
+
     // to set values of data
-    const newSale = new Sales({ quantitySold, date, storeName, kioskOwner });
+    const newSale = new Sales({
+      quantitySold,
+      date,
+      storeName,
+      kioskOwner,
+      stockAllocationId,
+    });
     // to save value to db
     const result = await newSale.save();
-    // set a res as 201 and send the resuls as a response
+    // set a res as 201 and send the results as a response
     res.status(201).send(result);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send("Internal Server Error"+ error);
   }
 };
 
