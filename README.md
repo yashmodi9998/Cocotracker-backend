@@ -8,59 +8,61 @@ This project focuses on the backend development using Node.js, Express.js, and M
 
 ## Collections
 
-### Users Collection(DONE)
+### Users Collection
 
-| Field       | Description                          |
-| ----------- | ------------------------------------ |
-| userID      | Unique identifier for the user       |
-| name        | Name of the user                     |
-| email       | Email address of the user            |
-| phoneNumber | Phone num of the user                |
-| password    | Password for user authentication     |
-| role        | Role of the user (admin/kiosk owner) |
+| Field       | Type   | Description                           |
+|-------------|--------|---------------------------------------|
+| name        | String | Name of the user (required)           |
+| email       | String | Email address of the user (required, unique) |
+| phoneNumber | String | Phone number of the user              |
+| password    | String | Password for user authentication (required) |
+| role        | String | Role of the user (admin/kiosk owner) (required, default: "kiosk owner") |
 
-### Kiosk Stores Collection(DONE)
+### Kiosk Stores Collection
 
-| Field              | Description                       |
-| ------------------ | --------------------------------- |
-| storeID            | Unique identifier for the store   |
-| storeName          | Name of the store                 |
-| address            | Address of the store              |
-| contactInformation | Contact information for the store |
+| Field              | Type   | Description                          |
+|--------------------|--------|--------------------------------------|
+| storeName          | String | Name of the store (required, unique) |
+| address            | String | Address of the store (required)      |
+| contactInformation | String | Contact information for the store (required) |
 
-### Stock Collection(DONE)
+### Stock Collection
 
-| Field        | Description                           |
-| ------------ | ------------------------------------- |
-| ID           | Unique identifier for the stock entry |
-| date         | Date of the stock entry               |
-| quantity     | Quantity of juice in stock            |
-| supplierName | Name of the supplier                  |
+| Field        | Type   | Description                          |
+|--------------|--------|--------------------------------------|
+| supplierName | String | Name of the supplier (required)      |
+| date         | Date   | Date of the transaction (required)   |
+| quantityStock| Number | Quantity of stock (required)         |
 
-### Sales Collection(DONE)
+### Sales Collection
 
-| Field        | Description                    |
-| ------------ | ------------------------------ |
-| storeID      | Identifier for the store       |
-| quantitySold | Quantity of juice sold         |
-| kioskOwnerID | Identifier for the kiosk owner |
-| date         | date of sales                  |
-| storeName    | Name of the store              |
-| kioskOwner   | Name of the kiosk owner        |
+| Field             | Type   | Description                       |
+|-------------------|--------|-----------------------------------|
+| quantitySold      | Number | Quantity of juice sold (required) |
+| date              | Date   | Date of the sale (required)       |
+| storeName         | String | Name of the store                 |
+| kioskOwner        | String | Name of the kiosk owner           |
+| stockAllocationId | ObjectId | Reference to the stock allocation (required) |
 
-### Return Stock Collection(DONE)
+### Stock Allocation Collection
 
-| Field          | Description                     |
-| -------------- | ------------------------------- |
-| storeID        | Identifier for the store        |
-| kioskOwnerId   | Identifier for the kiosk owner  |
-| remainingStock | Quantity of juice returned      |
-| reason         | Reason for returning the juice  |
-| status         | status of the request           |
-| dateRequested  | Date of the returnRequest       |
-| dateApproved   | Date of return request approved |
+| Field             | Type     | Description                              |
+|-------------------|----------|------------------------------------------|
+| kioskOwnerId      | ObjectId | Reference to the user (required)         |
+| allocatedStock    | Number   | Quantity of allocated stock (required)   |
+| dateAllocated     | Date     | Date of allocation (default: Date.now)   |
+| returnRequestId   | ObjectId | Reference to the return request          |
 
+### Return Stock Collection
 
+| Field             | Type     | Description                              |
+|-------------------|----------|------------------------------------------|
+| stockAllocationId | ObjectId | Reference to the stock allocation (required) |
+| returningStock    | Number   | Quantity of juice returned (required)    |
+| reason            | String   | Reason for returning the juice           |
+| status            | String   | Status of the request (enum: ["pending", "approved", "rejected"], default: "pending") |
+| dateRequested     | Date     | Date of the return request (default: Date.now) |
+| dateApproved      | Date     | Date of return request approval          |
 
 ## Usage
 
@@ -70,7 +72,6 @@ To run this project, make sure you have Node.js and MongoDB installed. Follow th
 
    ```sh
    git clone https://github.com/yashmodi9998/Cocotracker-backend.git
-
    ```
 
 2. Install dependencies:
@@ -86,7 +87,7 @@ To run this project, make sure you have Node.js and MongoDB installed. Follow th
    PORT=your_port_number
    JWT_SECRET=your_secret_key
    EMAIL=your_email
-   PASS= your_16_character_app_password
+   PASS=your_16_character_app_password
    ```
 
 4. Start the server:
@@ -97,72 +98,80 @@ To run this project, make sure you have Node.js and MongoDB installed. Follow th
 
 5. The server will be running at `http://localhost:<PORT>`, and you can use tools like Postman to interact with the API endpoints.
 
+## Deployment
+
+This project is deployed on Vercel and can be accessed at: [https://cocotracker-backend.vercel.app](https://cocotracker-backend.vercel.app)
+
 ## API Endpoints
 
-
----
-
-# API Documentation
-
-## Authentication
-All routes except `POST /login` `POST /register` require authentication. Use the JWT token in the `Authorization` header of your requests.
-
-## Endpoints
+### Authentication
+All routes except `POST /login` and `POST /register` require authentication. Use the JWT token in the `Authorization` header of your requests.
 
 ### User Routes
 
-| **Endpoint**        | **Method** | **Description**                  |
-|---------------------|------------|----------------------------------|
-| `/`                 | `GET`      | Get details of the logged-in user. |
-| `/register`         | `POST`     | Register a new user.              |
-| `/login`            | `POST`     | Log in and get a JWT token.       |
-| `/:id`              | `PUT`      | Update user details.             |
-| `/:id`              | `DELETE`   | Delete a user by ID.             |
+| **Endpoint** | **Method** | **Description**                    |
+|--------------|------------|------------------------------------|
+| `/`          | `GET`      | Get details of the logged-in user. |
+| `/register`  | `POST`     | Register a new user.               |
+| `/login`     | `POST`     | Log in and get a JWT token.        |
+| `/:id`       | `PUT`      | Update user details.               |
+| `/:id`       | `DELETE`   | Delete a user by ID.               |
 
 ### Store Routes
 
-| **Endpoint**        | **Method** | **Description**                  |
-|---------------------|------------|----------------------------------|
-| `/stores`           | `GET`      | Get a list of all stores.        |
-| `/stores`           | `POST`     | Add a new store.                 |
-| `/stores/:id`       | `DELETE`   | Delete a store by ID.            |
-| `/stores/:id`       | `PUT`      | Update store details.            |
+| **Endpoint**  | **Method** | **Description**           |
+|---------------|------------|---------------------------|
+| `/stores`     | `GET`      | Get a list of all stores. |
+| `/stores`     | `POST`     | Add a new store.          |
+| `/stores/:id` | `DELETE`   | Delete a store by ID.     |
+| `/stores/:id` | `PUT`      | Update store details.     |
 
 ### Stock Routes
 
-| **Endpoint**        | **Method** | **Description**                  |
-|---------------------|------------|----------------------------------|
-| `/stock`            | `GET`      | Get a list of all stocks.        |
-| `/stock`            | `POST`     | Add new stock.                   |
-| `/stock/:id`        | `DELETE`   | Delete a stock by ID.            |
-| `/stock/:id`        | `PUT`      | Update stock details.            |
+| **Endpoint**  | **Method** | **Description**           |
+|---------------|------------|---------------------------|
+| `/stock`      | `GET`      | Get a list of all stocks. |
+| `/stock`      | `POST`     | Add new stock.            |
+| `/stock/:id`  | `DELETE`   | Delete a stock by ID.     |
+| `/stock/:id`  | `PUT`      | Update stock details.     |
 
 ### Sales Routes
 
-| **Endpoint**        | **Method** | **Description**                  |
-|---------------------|------------|----------------------------------|
-| `/sales`            | `GET`      | Get a list of all sales.         |
-| `/sales`            | `POST`     | Add a new sale.                  |
-| `/sales/:id`        | `DELETE`   | Delete a sale by ID.             |
-| `/sales/:id`        | `PUT`      | Update sale details.             |
+| **Endpoint**  | **Method** | **Description**           |
+|---------------|------------|---------------------------|
+| `/sales`      | `GET`      | Get a list of all sales.  |
+| `/sales`      | `POST`     | Add a new sale.           |
+| `/sales/:id`  | `DELETE`   | Delete a sale by ID.      |
+| `/sales/:id`  | `PUT`      | Update sale details.      |
 
 ### Stock Allocation Routes
 
-| **Endpoint**                         | **Method** | **Description**                           |
-|--------------------------------------|------------|-------------------------------------------|
-| `/allocate-stock`                    | `GET`      | Get a list of all stock allocations (Admin only). |
-| `/allocate-stock/:kioskOwnerId`      | `GET`      | Get stock allocations for a specific kiosk owner. |
-| `/allocate-stock`                    | `POST`     | Allocate stock to a kiosk owner.          |
-| `/allocate-stock/:id`                | `DELETE`   | Delete a stock allocation by ID.          |
-| `/allocate-stock/:id`                | `PUT`      | Update a stock allocation by ID.          |
+| **Endpoint**                    | **Method** | **Description**                                          |
+|---------------------------------|------------|----------------------------------------------------------|
+| `/allocate-stock`               | `GET`      | Get a list of all stock allocations (Admin only).        |
+| `/allocate-stock/:kioskOwnerId` | `GET`      | Get stock allocations for a specific kiosk owner.        |
+| `/allocate-stock`               | `POST`     | Allocate stock to a kiosk owner.                         |
+| `/allocate-stock/:id`           | `DELETE`   | Delete a stock allocation by ID.                         |
+| `/allocate-stock/:id`           | `PUT`      | Update a stock allocation by ID.                         |
 
 ### Return Request Routes
 
-| **Endpoint**                         | **Method** | **Description**                           |
-|--------------------------------------|------------|-------------------------------------------|
-| `/return-request`                    | `POST`     | Request a return for allocated stock.     |
-| `/return-requests`                   | `GET`      | Get a list of all return requests.        |
-| `/return-requests/:kioskOwnerId`     | `GET`      | Get return requests for a specific kiosk owner. |
-| `/approve-return-request/:id`        | `PUT`      | Approve a return request.                 |
-| `/return-request/:id`                | `DELETE`   | Reject a return request.                 |
+| **Endpoint**                    | **Method** | **Description**                              |
+|---------------------------------|------------|----------------------------------------------|
+| `/return-request`               | `POST`     | Request a return for allocated stock.        |
+| `/return-requests`              | `GET`      | Get a list of all return requests.           |
+| `/return-requests/:kioskOwnerId`| `GET`      | Get return requests for a specific kiosk owner. |
+| `/approve-return-request/:id`   | `PUT`      | Approve a return request.                    |
+| `/return-request/:id`           | `DELETE`   | Reject a return request.                     |
+
+## Features
+
+### Email Notifications
+
+Using Nodemailer, the system sends automated email notifications for the following events:
+- When new stock is allocated to a user.
+- When a user requests a return.
+- When a return request is approved or rejected.
+
+Configure your email settings in the `.env` file for these features to work.
 
